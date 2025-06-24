@@ -15,19 +15,23 @@ export const App = () => {
 
 	useEffect(() => {
 		const getIngredients = async () => {
-			setLoading(true);
-			const response = await fetch(ingredientsUrl);
-			if (!response.ok) {
-				const message = `Ошибка получения данных: ${response.status}`;
-				throw new Error(message);
+			try {
+				setLoading(true);
+				const response = await fetch(ingredientsUrl);
+				if (!response.ok) {
+					const message = `Ошибка получения данных: ${response.status}`;
+					throw new Error(message);
+				}
+				const ingredients_data = await response.json();
+				setIngredients(ingredients_data.data);
+			} catch (error) {
+				console.log(error.message);
+			} finally {
+				setLoading(false);
 			}
-			const ingredients_data = await response.json();
-			setIngredients(ingredients_data.data);
 		};
-		getIngredients().catch((error) => {
-			console.log(error.message);
-		});
-		setLoading(false);
+
+		getIngredients();
 	}, []);
 
 	const closeModal = useCallback(() => {
