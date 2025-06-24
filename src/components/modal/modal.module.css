@@ -1,0 +1,24 @@
+.wrap {
+	position: relative;
+	width: 720px;
+	overflow: hidden;
+	background-color: var(--background);
+	border-radius: 40px;
+	opacity: 1;
+}
+
+.buttonclose {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 80px;
+	padding: 0;
+}
