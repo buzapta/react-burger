@@ -24,6 +24,12 @@ export const burgerIngredientsSlice = createSlice({
 				);
 			},
 		},
+		clearBurgerIngredients: {
+			reducer: (state) => {
+				state.ingredients = initialState.ingredients;
+				state.bun = initialState.bun;
+			},
+		},
 		addBurgerBun: {
 			reducer: (state, action) => {
 				state.bun = action.payload;
@@ -48,4 +54,5 @@ export const {
 	removeBurgerIngredient,
 	addBurgerBun,
 	moveBurgerIngredient,
+	clearBurgerIngredients,
 } = burgerIngredientsSlice.actions;
