@@ -1,10 +1,31 @@
 import styles from './order-details.module.css';
+import { useSelector } from 'react-redux';
 import img_order_details_done from '../../images/order_details_done.png';
+import { getOrderState } from '../../services/orders/selectors.js';
+import { Preloader } from '@components/preloader/preloader.jsx';
 
 export const OrderDetails = () => {
+	const { order, loading, error } = useSelector(getOrderState);
+
+	if (loading) {
+		return (
+			<article className={`${styles.order_details}`}>
+				<Preloader />
+			</article>
+		);
+	}
+
+	if (!loading && error) {
+		return (
+			<article className={`${styles.order_details}`}>
+				<p className={'text text text_type_main-medium mt-8'}>{`${error}`}</p>
+			</article>
+		);
+	}
+
 	return (
 		<article className={`${styles.order_details}`}>
-			<p className={' text text_type_digits-large'}>034536</p>
+			<p className={' text text_type_digits-large'}>{order.order.number}</p>
 			<p className={'text text text_type_main-medium mt-8'}>
 				идентификатор заказа
 			</p>
