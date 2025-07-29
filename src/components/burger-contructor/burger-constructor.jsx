@@ -1,51 +1,51 @@
-import * as PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
-import { useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import {
 	getBurgerIngredientsPrice,
 	getBurgerIngredientsState,
-} from '../../services/burger-ingredients/selectors.js';
+} from '../../services/burger-ingredients/selectors';
 import {
 	addBurgerIngredient,
 	addBurgerBun,
-} from '../../services/burger-ingredients/reducers.js';
-import { OrderDetails } from '../order-details/order-details.jsx';
+} from '../../services/burger-ingredients/reducers';
 import {
 	Button,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import {
+	addOrderPagePath,
 	burgerGroupType,
 	constructorIngredientLocation,
-	DragItemTypes,
-	modalTypes,
-} from '../../config/consts.js';
-import { BurgerConstructorIngredient } from './burger-constructor-ingredient/burger-constructor-ingredient.jsx';
+	dragItemTypes,
+	addOrderButtonText,
+} from '../../config/consts';
+import { BurgerConstructorIngredient } from './burger-constructor-ingredient/burger-constructor-ingredient';
 
-import { addOrder } from '../../services/orders/actions.js';
-
-export const BurgerConstructor = ({ openModal }) => {
+export const BurgerConstructor = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const location = useLocation();
 	const burgerIngredientsPrice = useSelector(getBurgerIngredientsPrice());
 
 	const [, dropTargetIngredient] = useDrop({
-		accept: DragItemTypes.ingredient,
+		accept: dragItemTypes.ingredient,
 		drop(ingredient) {
 			handleDropIngredient(ingredient);
 		},
 	});
 
 	const [, dropTargetBunTop] = useDrop({
-		accept: DragItemTypes.ingredient,
+		accept: dragItemTypes.ingredient,
 		drop(ingredient) {
 			handleDropIngredient(ingredient);
 		},
 	});
 
 	const [, dropTargetBunBottom] = useDrop({
-		accept: DragItemTypes.ingredient,
+		accept: dragItemTypes.ingredient,
 		drop(ingredient) {
 			handleDropIngredient(ingredient);
 		},
@@ -61,23 +61,14 @@ export const BurgerConstructor = ({ openModal }) => {
 
 	const { bun, ingredients } = useSelector(getBurgerIngredientsState);
 
-	const openCard = useCallback(() => {
-		openModal({
-			header: '',
-			content: <OrderDetails></OrderDetails>,
-			modalType: modalTypes.orderDetails,
-		});
-	}, [openModal]);
-
 	const handleOrderButtonClick = (event) => {
 		event.preventDefault();
 		event.stopPropagation();
-		dispatch(addOrder());
-		openCard();
+		navigate(addOrderPagePath, { state: { backgroundLocation: location } });
 	};
 
 	return (
-		<section className={`${styles.burger_constructor} pt-25`}>
+		<section className={`${styles.burger_constructor} pt-25 ml-10`}>
 			<div className={`${styles.bun} ml-4 pl-4`} ref={dropTargetBunTop}>
 				<BurgerConstructorIngredient
 					ingredient={bun}
@@ -122,13 +113,9 @@ export const BurgerConstructor = ({ openModal }) => {
 					type='primary'
 					size='large'
 					onClick={handleOrderButtonClick}>
-					Оформить заказ
+					{addOrderButtonText}
 				</Button>
 			</div>
 		</section>
 	);
-};
-
-BurgerConstructor.propTypes = {
-	openModal: PropTypes.func.isRequired,
 };

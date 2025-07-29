@@ -1,4 +1,4 @@
-import { getResponse } from './api';
+import { fetchWithRefresh } from './users-api';
 
 export const ordersApiConfig = {
 	baseUrl: 'https://norma.nomoreparties.space/api',
@@ -8,11 +8,12 @@ export const ordersApiConfig = {
 };
 
 export const postOrder = async (orderIngredients) => {
-	console.log();
-	const res = await fetch(`${ordersApiConfig.baseUrl}/orders`, {
+	return await fetchWithRefresh(`${ordersApiConfig.baseUrl}/orders`, {
 		method: 'POST',
-		headers: ordersApiConfig.headers,
+		headers: {
+			...ordersApiConfig.headers,
+			Authorization: localStorage.getItem('accessToken'),
+		},
 		body: JSON.stringify({ ingredients: orderIngredients }),
 	});
-	return getResponse(res);
 };

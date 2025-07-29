@@ -10,3 +10,8 @@ export const getIngredientsByType = (burgerGroupType) =>
 				(ingredient) => ingredient.type === burgerGroupType.code
 			)
 	);
+export const getIngredientById = (_id) =>
+	createSelector(
+		(store) => getIngredients(store),
+		(ingredients) => ingredients.find((ingredient) => ingredient._id === _id)
+	);

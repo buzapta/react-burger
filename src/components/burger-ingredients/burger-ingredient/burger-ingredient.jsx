@@ -1,38 +1,32 @@
-import * as PropTypes from 'prop-types';
-import { ingredientPropType } from '@utils/prop-types.js';
+import { ingredientPropType } from '@utils/prop-types';
 import styles from './burger-ingredient.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
-import { showIngredient } from '../../../services/ingredient/reducers.js';
 import {
 	CurrencyIcon,
 	Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { getBurgerIngredientCount } from '../../../services/burger-ingredients/selectors.js';
-import { DragItemTypes } from '../../../config/consts.js';
+import { getBurgerIngredientCount } from '../../../services/burger-ingredients/selectors';
+import { dragItemTypes, ingredientsPagePath } from '../../../config/consts';
 
-export const BurgerIngredient = ({ ingredient, openCard }) => {
-	const dispatch = useDispatch();
+export const BurgerIngredient = ({ ingredient }) => {
+	const location = useLocation();
 	const burgerIngredientCount = useSelector(
 		getBurgerIngredientCount(ingredient._id)
 	);
 	const [, dragRef] = useDrag({
-		type: DragItemTypes.ingredient,
+		type: dragItemTypes.ingredient,
 		item: { ingredient },
 	});
-	const handleClick = (event) => {
-		event.preventDefault();
-		event.stopPropagation();
-		dispatch(showIngredient(ingredient));
-		openCard(ingredient);
-	};
 
 	return (
-		<>
-			<button
-				className={styles.burger_ingredient}
-				onClick={handleClick}
-				ref={dragRef}>
+		<article className={styles.burger_ingredient} ref={dragRef}>
+			<Link
+				key={ingredient._id}
+				className={styles.burger_link}
+				to={`${ingredientsPagePath}/${ingredient._id}`}
+				state={{ backgroundLocation: location }}>
 				<div className={styles.counter}>
 					<Counter
 						count={burgerIngredientCount}
@@ -46,12 +40,11 @@ export const BurgerIngredient = ({ ingredient, openCard }) => {
 					<CurrencyIcon />
 				</div>
 				<p className={'text text_type_main-default mt-1'}>{ingredient.name}</p>
-			</button>
-		</>
+			</Link>
+		</article>
 	);
 };
 
 BurgerIngredient.propTypes = {
 	ingredient: ingredientPropType.isRequired,
-	openCard: PropTypes.func.isRequired,
 };
