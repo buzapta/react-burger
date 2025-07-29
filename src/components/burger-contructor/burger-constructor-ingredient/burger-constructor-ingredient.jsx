@@ -14,7 +14,7 @@ import {
 import {
 	removeBurgerIngredient,
 	moveBurgerIngredient,
-} from '../../../services/burger-ingredients/reducers.js';
+} from '../../../services/burger-ingredients/reducers';
 import {
 	burgerGroupType,
 	burgerConstructorIngredientBlankText,
@@ -22,8 +22,8 @@ import {
 	burgerConstructorBunBlankText,
 	burgerConstructorBunBlankImg,
 	constructorIngredientLocation,
-	DragItemTypes,
-} from '../../../config/consts.js';
+	dragItemTypes,
+} from '../../../config/consts';
 
 export const BurgerConstructorIngredient = ({
 	ingredient,
@@ -34,7 +34,7 @@ export const BurgerConstructorIngredient = ({
 	const dispatch = useDispatch();
 	const ref = useRef(null);
 	const [{ handlerId }, drop] = useDrop({
-		accept: DragItemTypes.constructor_ingredient,
+		accept: dragItemTypes.constructor_ingredient,
 		collect(monitor) {
 			return {
 				handlerId: monitor.getHandlerId(),
@@ -73,7 +73,7 @@ export const BurgerConstructorIngredient = ({
 	};
 
 	const [, drag] = useDrag({
-		type: DragItemTypes.constructor_ingredient,
+		type: dragItemTypes.constructor_ingredient,
 		item: () => {
 			return { ingredientKey, ingredientIndex };
 		},

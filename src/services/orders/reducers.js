@@ -17,6 +17,11 @@ export const ordersSlice = createSlice({
 				state.loading = false;
 			},
 		},
+		clearOrder: {
+			reducer: (state) => {
+				state.order = null;
+			},
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -35,4 +40,4 @@ export const ordersSlice = createSlice({
 	},
 });
 
-export const { addOrderValidateError } = ordersSlice.actions;
+export const { addOrderValidateError, clearOrder } = ordersSlice.actions;

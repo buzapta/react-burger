@@ -2,7 +2,7 @@ import * as PropTypes from 'prop-types';
 import {
 	constructorIngredientLocation,
 	burgerGroupType,
-} from '../config/consts.js';
+} from '../config/consts';
 
 export const ingredientPropType = PropTypes.shape({
 	_id: PropTypes.string.isRequired,

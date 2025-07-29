@@ -1,7 +1,6 @@
-import { postOrder } from '../../utils/orders-api.js';
+import { postOrder } from '../../utils/orders-api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addOrderValidateError } from './reducers.js';
-import { clearBurgerIngredients } from '../burger-ingredients/reducers.js';
+import { addOrderValidateError } from './reducers';
 
 export const addOrderThunk = createAsyncThunk(
 	'orders/addOrder',
@@ -19,8 +18,9 @@ export const addOrder = () => (dispatch, getState) => {
 			burgerIngredients.bun._id,
 		];
 		dispatch(addOrderThunk(orderIngredients));
-		dispatch(clearBurgerIngredients());
 	} else {
-		dispatch(addOrderValidateError('Ошибка содержимого заказа'));
+		dispatch(
+			addOrderValidateError('Заказ должен содержать булки и ингредиенты.')
+		);
 	}
 };
