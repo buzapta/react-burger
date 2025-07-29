@@ -1,65 +1,47 @@
 import styles from './app.module.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { AppHeader } from '@components/app-header/app-header.jsx';
 import { BurgerConstructor } from '@components/burger-contructor/burger-constructor.jsx';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients.jsx';
 import { Modal } from '../modal/modal.jsx';
-import { Preloader } from '@components/preloader/preloader.jsx';
-import { ingredientsUrl } from '../../config/consts.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { clearIngredient } from '../../services/ingredient/reducers.js';
+import { modalTypes } from '../../config/consts.js';
 
 export const App = () => {
-	const [loading, setLoading] = useState(false);
-	const [ingredients, setIngredients] = useState([]);
 	const [showModal, setShowModal] = useState(false);
 	const [modalContent, setModalContent] = useState('');
-
-	useEffect(() => {
-		const getIngredients = async () => {
-			try {
-				setLoading(true);
-				const response = await fetch(ingredientsUrl);
-				if (!response.ok) {
-					const message = `Ошибка получения данных: ${response.status}`;
-					throw new Error(message);
-				}
-				const ingredients_data = await response.json();
-				setIngredients(ingredients_data.data);
-			} catch (error) {
-				console.log(error.message);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		getIngredients();
-	}, []);
+	const dispatch = useDispatch();
 
 	const closeModal = useCallback(() => {
 		setShowModal(false);
+		if (modalContent.modalType === modalTypes.ingredientsDetail) {
+			dispatch(clearIngredient());
+		}
 		setModalContent('');
-	}, []);
+	}, [modalContent, dispatch]);
 
-	const openModal = useCallback((ModalContent) => {
-		setModalContent(ModalContent);
+	const openModal = useCallback((modalContentNew) => {
+		setModalContent(modalContentNew);
 		setShowModal(true);
 	}, []);
-
-	if (loading) {
-		return <Preloader />;
-	}
 
 	return (
 		<div className={styles.app}>
 			<AppHeader />
 			<main className={`${styles.main} pl-5 pr-5`}>
-				<BurgerIngredients ingredients={ingredients} openModal={openModal} />
-				<BurgerConstructor ingredients={ingredients} openModal={openModal} />
-				{showModal && (
-					<Modal
-						header={modalContent.header}
-						onClose={closeModal}
-						modalContent={modalContent.content}></Modal>
-				)}
+				<DndProvider backend={HTML5Backend}>
+					<BurgerIngredients openModal={openModal} />
+					<BurgerConstructor openModal={openModal} />
+					{showModal && (
+						<Modal
+							header={modalContent.header}
+							onClose={closeModal}
+							modalContent={modalContent.content}></Modal>
+					)}
+				</DndProvider>
 			</main>
 		</div>
 	);

@@ -1,77 +1,121 @@
 import * as PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import { useCallback } from 'react';
-import { ingredientPropType } from '@utils/prop-types.js';
-import { burgerGroupType } from '../../config/consts.js';
+import { useDrop } from 'react-dnd';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	getBurgerIngredientsPrice,
+	getBurgerIngredientsState,
+} from '../../services/burger-ingredients/selectors.js';
+import {
+	addBurgerIngredient,
+	addBurgerBun,
+} from '../../services/burger-ingredients/reducers.js';
 import { OrderDetails } from '../order-details/order-details.jsx';
 import {
 	Button,
-	ConstructorElement,
 	CurrencyIcon,
-	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+	burgerGroupType,
+	constructorIngredientLocation,
+	DragItemTypes,
+	modalTypes,
+} from '../../config/consts.js';
+import { BurgerConstructorIngredient } from './burger-constructor-ingredient/burger-constructor-ingredient.jsx';
 
-export const BurgerConstructor = ({ ingredients, openModal }) => {
-	let ingredient_bun = ingredients.find(
-		(ingredient) => ingredient.type === burgerGroupType.bun.code
-	);
+import { addOrder } from '../../services/orders/actions.js';
+
+export const BurgerConstructor = ({ openModal }) => {
+	const dispatch = useDispatch();
+	const burgerIngredientsPrice = useSelector(getBurgerIngredientsPrice());
+
+	const [, dropTargetIngredient] = useDrop({
+		accept: DragItemTypes.ingredient,
+		drop(ingredient) {
+			handleDropIngredient(ingredient);
+		},
+	});
+
+	const [, dropTargetBunTop] = useDrop({
+		accept: DragItemTypes.ingredient,
+		drop(ingredient) {
+			handleDropIngredient(ingredient);
+		},
+	});
+
+	const [, dropTargetBunBottom] = useDrop({
+		accept: DragItemTypes.ingredient,
+		drop(ingredient) {
+			handleDropIngredient(ingredient);
+		},
+	});
+
+	const handleDropIngredient = (item) => {
+		if (item.ingredient.type != burgerGroupType.bun.code) {
+			dispatch(addBurgerIngredient(item.ingredient));
+		} else {
+			dispatch(addBurgerBun(item.ingredient));
+		}
+	};
+
+	const { bun, ingredients } = useSelector(getBurgerIngredientsState);
 
 	const openCard = useCallback(() => {
-		openModal({ header: '', content: <OrderDetails></OrderDetails> });
+		openModal({
+			header: '',
+			content: <OrderDetails></OrderDetails>,
+			modalType: modalTypes.orderDetails,
+		});
 	}, [openModal]);
 
 	const handleOrderButtonClick = (event) => {
 		event.preventDefault();
 		event.stopPropagation();
+		dispatch(addOrder());
 		openCard();
 	};
 
 	return (
 		<section className={`${styles.burger_constructor} pt-25`}>
-			{ingredient_bun ? (
-				<div className={'ml-4 pl-4'}>
-					<article className={styles.item}>
-						<ConstructorElement
-							type='top'
-							isLocked={true}
-							text={`${ingredient_bun.name} (верх)`}
-							price={200}
-							thumbnail={ingredient_bun.image}
+			<div className={`${styles.bun} ml-4 pl-4`} ref={dropTargetBunTop}>
+				<BurgerConstructorIngredient
+					ingredient={bun}
+					ingredientLocation={constructorIngredientLocation.BunTop}
+				/>
+			</div>
+			<ul className={`${styles.list} ml-4`} ref={dropTargetIngredient}>
+				{ingredients.length == 0 && (
+					<li className={`${styles.list_item} ml-6`}>
+						<BurgerConstructorIngredient
+							ingredientLocation={constructorIngredientLocation.Ingredient}
 						/>
-					</article>
-				</div>
-			) : null}
-			<ul className={`${styles.list} ml-4`}>
-				{ingredients
-					.filter((ingredient) => ingredient.type != burgerGroupType.bun.code)
-					.map((item) => (
-						<li key={item._id} className={styles.list_item}>
-							<DragIcon />
-							<article className={styles.item}>
-								<ConstructorElement
-									text={item.name}
-									price={item.price}
-									thumbnail={item.image}
-								/>
-							</article>
-						</li>
-					))}
+					</li>
+				)}
+				{ingredients.map((ingredient, index) => (
+					<li
+						key={ingredient.key}
+						className={styles.list_item}
+						index={ingredient.key}>
+						<BurgerConstructorIngredient
+							ingredient={ingredient}
+							ingredientLocation={constructorIngredientLocation.Ingredient}
+							ingredientKey={ingredient.key}
+							ingredientIndex={index}
+						/>
+					</li>
+				))}
 			</ul>
-			{ingredient_bun ? (
-				<div className={'ml-4 pl-4'}>
-					<article className={styles.item}>
-						<ConstructorElement
-							type='bottom'
-							isLocked={true}
-							text={`${ingredient_bun.name} (верх)`}
-							price={200}
-							thumbnail={ingredient_bun.image}
-						/>
-					</article>
-				</div>
-			) : null}
+			<div className={`${styles.bun} ml-4 pl-4`} ref={dropTargetBunBottom}>
+				<BurgerConstructorIngredient
+					ingredient={bun}
+					ingredientLocation={constructorIngredientLocation.BunBottom}
+				/>
+			</div>
 			<div className={`${styles.total} mt-10`}>
-				<p className={'text text_type_digits-medium'}>610</p>
+				<p className={'text text_type_digits-medium'}>
+					{burgerIngredientsPrice}
+				</p>
 				<CurrencyIcon />
 				<Button
 					htmlType='button'
@@ -86,6 +130,5 @@ export const BurgerConstructor = ({ ingredients, openModal }) => {
 };
 
 BurgerConstructor.propTypes = {
-	ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
 	openModal: PropTypes.func.isRequired,
 };
