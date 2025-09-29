@@ -8,29 +8,36 @@ import {
 	burgerIngredientsHeader,
 } from '../../config/consts';
 
-export const BurgerIngredients = () => {
-	const bunGroupRef = useRef([]);
-	const mainGroupRef = useRef([]);
-	const sauceGroupRef = useRef([]);
+export const BurgerIngredients = (): React.JSX.Element => {
+	useRef<HTMLDivElement | null>(null);
+	const bunGroupRef = useRef<HTMLDivElement | null>(null);
+	const mainGroupRef = useRef<HTMLDivElement | null>(null);
+	const sauceGroupRef = useRef<HTMLDivElement | null>(null);
 
 	const [currentGroupType, setCurrentGroupType] = useState(
 		burgerGroupType_default
 	);
 
 	const handleGroupScroll = () => {
-		let bunDistance = Math.abs(
-			document.getElementById('burger_ingredients_menu').getBoundingClientRect()
-				.bottom - bunGroupRef.current.getBoundingClientRect().top
+		const bunDistance = Math.abs(
+			(document
+				.getElementById('burger_ingredients_menu')
+				?.getBoundingClientRect().bottom ?? 0) -
+				(bunGroupRef.current?.getBoundingClientRect().top ?? 0)
 		);
-		let sauceDistance = Math.abs(
-			document.getElementById('burger_ingredients_menu').getBoundingClientRect()
-				.bottom - sauceGroupRef.current.getBoundingClientRect().top
+		const sauceDistance = Math.abs(
+			(document
+				.getElementById('burger_ingredients_menu')
+				?.getBoundingClientRect().bottom ?? 0) -
+				(sauceGroupRef.current?.getBoundingClientRect().top ?? 0)
 		);
-		let mainDistance = Math.abs(
-			document.getElementById('burger_ingredients_menu').getBoundingClientRect()
-				.bottom - mainGroupRef.current.getBoundingClientRect().top
+		const mainDistance = Math.abs(
+			(document
+				.getElementById('burger_ingredients_menu')
+				?.getBoundingClientRect().bottom ?? 0) -
+				(mainGroupRef.current?.getBoundingClientRect().top ?? 0)
 		);
-		let minDistance = Math.min(bunDistance, sauceDistance, mainDistance);
+		const minDistance = Math.min(bunDistance, sauceDistance, mainDistance);
 
 		switch (minDistance) {
 			case bunDistance:
@@ -45,8 +52,10 @@ export const BurgerIngredients = () => {
 		}
 	};
 
-	const handleMenuClick = (event) => {
-		document.getElementById(event).scrollIntoView();
+	type TTabClick = (value: string) => void;
+
+	const handleMenuClick: TTabClick = (value) => {
+		document.getElementById(value)?.scrollIntoView();
 	};
 
 	return (

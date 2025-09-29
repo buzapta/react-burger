@@ -1,13 +1,27 @@
 import { getResponse } from './api';
+import {
+	TForgotPasswordApiReq,
+	TPasswordApiRes,
+	TResetPasswordApiReq,
+	TUserRegisterApiReq,
+	TUserApiRes,
+	TRegisterApiRes,
+	TLoginApiReq,
+	TLogoutApiReq,
+	TUserUpdateApiReq,
+	TUserUpdateApiRes,
+	TTokenRefreshApiReq,
+} from '@utils/types';
 
 const usersApiConfig = {
 	baseUrl: 'https://norma.nomoreparties.space/api',
 	headers: {
+		Accept: 'application/json',
 		'Content-Type': 'application/json; charset=UTF-8',
 	},
 };
 
-const setToken = (accessToken, refreshToken) => {
+const setToken = (accessToken: string, refreshToken: string) => {
 	localStorage.setItem('accessToken', accessToken);
 	localStorage.setItem('refreshToken', refreshToken);
 };
@@ -17,9 +31,11 @@ const removeToken = () => {
 	localStorage.removeItem('refreshToken');
 };
 
-const getResponseWithSetToken = async (res) => {
+const getResponseWithSetToken = async <T extends TUserApiRes>(
+	res: Response
+): Promise<T> => {
 	try {
-		return await getResponse(res).then((response) => {
+		return await getResponse<T>(res).then((response) => {
 			setToken(response.accessToken, response.refreshToken);
 			return response;
 		});
@@ -29,22 +45,22 @@ const getResponseWithSetToken = async (res) => {
 	}
 };
 
-const register = async (data = {}) => {
+const register = async (data: TUserRegisterApiReq) => {
 	const res = await fetch(`${usersApiConfig.baseUrl}/auth/register`, {
 		method: 'POST',
 		headers: usersApiConfig.headers,
 		body: JSON.stringify(data),
 	});
-	return getResponseWithSetToken(res);
+	return getResponseWithSetToken<TRegisterApiRes>(res);
 };
 
-const login = async (data = {}) => {
+const login = async (data: TLoginApiReq) => {
 	const res = await fetch(`${usersApiConfig.baseUrl}/auth/login`, {
 		method: 'POST',
 		headers: usersApiConfig.headers,
 		body: JSON.stringify(data),
 	});
-	return getResponseWithSetToken(res);
+	return getResponseWithSetToken<TUserApiRes>(res);
 };
 
 const logout = async () => {
@@ -54,44 +70,58 @@ const logout = async () => {
 		body: JSON.stringify({ token: localStorage.getItem('refreshToken') }),
 	});
 	removeToken();
-	return getResponse(res);
+	return getResponse<TLogoutApiReq>(res);
 };
 
-const getUser = async () => {
-	return await fetchWithRefresh(`${usersApiConfig.baseUrl}/auth/user`, {
-		method: 'GET',
-		headers: {
-			...usersApiConfig.headers,
-			Authorization: localStorage.getItem('accessToken'),
-		},
-	});
+const getUser = async (): Promise<TUserApiRes | Error> => {
+	return await fetchWithRefresh<TUserApiRes>(
+		`${usersApiConfig.baseUrl}/auth/user`,
+		{
+			method: 'GET',
+			// @ts-expect-error "sprint5"
+			headers: {
+				...usersApiConfig.headers,
+				authorization: localStorage.getItem('accessToken'),
+			},
+		}
+	);
 };
 
-const updateUser = async (data = {}) => {
-	return await fetchWithRefresh(`${usersApiConfig.baseUrl}/auth/user`, {
-		method: 'PATCH',
-		headers: {
-			...usersApiConfig.headers,
-			Authorization: localStorage.getItem('accessToken'),
-		},
-		body: JSON.stringify(data),
-	});
+const updateUser = async (
+	data: TUserUpdateApiReq
+): Promise<TUserUpdateApiRes | Error> => {
+	return await fetchWithRefresh<TUserUpdateApiRes>(
+		`${usersApiConfig.baseUrl}/auth/user`,
+		{
+			method: 'PATCH',
+			// @ts-expect-error "sprint5"
+			headers: {
+				...usersApiConfig.headers,
+				authorization: localStorage.getItem('accessToken'),
+			},
+			body: JSON.stringify(data),
+		}
+	);
 };
 
-const forgotPassword = (data = {}) => {
+const forgotPassword = (
+	data: TForgotPasswordApiReq
+): Promise<TPasswordApiRes> => {
 	return fetch(`${usersApiConfig.baseUrl}/password-reset`, {
 		method: 'POST',
 		headers: usersApiConfig.headers,
 		body: JSON.stringify(data),
-	}).then(getResponse);
+	}).then(getResponse<TPasswordApiRes>);
 };
 
-const resetPassword = (data = {}) => {
+const resetPassword = (
+	data: TResetPasswordApiReq
+): Promise<TPasswordApiRes> => {
 	return fetch(`${usersApiConfig.baseUrl}/password-reset/reset`, {
 		method: 'POST',
 		headers: usersApiConfig.headers,
 		body: JSON.stringify(data),
-	}).then(getResponse);
+	}).then(getResponse<TPasswordApiRes>);
 };
 
 const refreshToken = () => {
@@ -102,7 +132,7 @@ const refreshToken = () => {
 			token: localStorage.getItem('refreshToken'),
 		}),
 	})
-		.then(getResponse)
+		.then(getResponse<TTokenRefreshApiReq>)
 		.then((refreshData) => {
 			if (!refreshData.success) {
 				return Promise.reject(refreshData);
@@ -117,22 +147,28 @@ const refreshToken = () => {
 		});
 };
 
-export const fetchWithRefresh = async (url, options) => {
+export const fetchWithRefresh = async <T>(
+	url: string | URL | Request,
+	options?: RequestInit | undefined
+): Promise<T | Error> => {
 	try {
 		const res = await fetch(url, options);
-		return await getResponse(res);
+		return await getResponse<T>(res);
 	} catch (err) {
-		if (err.message === 'jwt expired') {
+		if ((err as Error).message === 'jwt expired') {
 			try {
 				const refreshData = await refreshToken();
-				options.headers.Authorization = refreshData.accessToken;
+				if (options && options.headers) {
+					// @ts-expect-error "sprint5"
+					options.headers.Authorization = refreshData.accessToken;
+				}
 				const res = await fetch(url, options);
-				return await getResponse(res);
+				return await getResponse<T>(res);
 			} catch (err_refresh) {
-				return Promise.reject(err_refresh);
+				return Promise.reject<Error>(err_refresh);
 			}
 		} else {
-			return Promise.reject(err);
+			return Promise.reject<Error>(err);
 		}
 	}
 };

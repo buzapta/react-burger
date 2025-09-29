@@ -1,5 +1,5 @@
 import styles from './profile.module.css';
-import { useResolvedPath, NavLink, Outlet } from 'react-router';
+import { useResolvedPath, NavLink, Outlet, Path } from 'react-router';
 
 import {
 	profilePagePath,
@@ -12,8 +12,8 @@ import {
 	subMenuHeaderTip,
 } from '../../config/consts';
 
-export const Profile = () => {
-	const resolvesPath = useResolvedPath();
+export const Profile = (): React.JSX.Element => {
+	const resolvesPath = useResolvedPath({} as Partial<Path>);
 
 	return (
 		<>

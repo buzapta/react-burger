@@ -1,7 +1,8 @@
 import styles from './register.module.css';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+// @ts-expect-error "sprint5"
 import { register } from '../../../services/users/actions';
 
 import {
@@ -17,26 +18,25 @@ import {
 	registerAlreadyLink,
 } from '../../../config/consts';
 
-export const Register = () => {
+export const Register = (): React.JSX.Element => {
 	const dispatch = useDispatch();
+	const [name, setName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [pass, setPass] = useState<string>('');
 
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-	const [pass, setPass] = useState('');
-
-	const handleNameChange = (event) => {
+	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 	};
 
-	const handleEmailChange = (event) => {
+	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setEmail(event.target.value);
 	};
 
-	const handlePassChange = (event) => {
+	const handlePassChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setPass(event.target.value);
 	};
 
-	function handleFormSubmit(event) {
+	function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		dispatch(register({ email: email, password: pass, name: name }));
 	}

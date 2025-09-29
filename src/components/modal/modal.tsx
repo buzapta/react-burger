@@ -1,33 +1,38 @@
-import * as PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 import styles from './modal.module.css';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { modalHeaderContext } from '../../config/consts';
+import { TmodalHeader } from '../../utils/types';
 
-const modalRoot = document.getElementById('modal_id');
+const modalRoot = document.getElementById('modal_id') as HTMLElement;
+type TProps = { modalContent: React.JSX.Element };
+type THeaderState = [
+	TmodalHeader,
+	React.Dispatch<React.SetStateAction<TmodalHeader>>,
+];
 
-export const Modal = (props) => {
+export const Modal = (props: TProps): React.JSX.Element => {
 	const { modalContent } = props;
-	const [header, setHeader] = useState('');
+	const [header, setHeader]: THeaderState = useState<TmodalHeader>('');
 	const headerValue = { setHeader };
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLDivElement | null>(null);
 	const navigate = useNavigate();
 
 	const handleClose = useCallback(() => {
-		navigate(-1, { replace: true });
+		navigate(-1 as To, { replace: true });
 	}, [navigate]);
 
 	useEffect(() => {
-		const handleEscapePress = (event) => {
+		const handleEscapePress = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				handleClose();
 			}
 		};
 
-		const handleClick = (event) => {
+		const handleClick = (event: MouseEvent) => {
 			event.preventDefault();
 			event.stopPropagation();
 			if (inputRef.current === event.target) {
@@ -64,9 +69,4 @@ export const Modal = (props) => {
 		</ModalOverlay>,
 		modalRoot
 	);
-};
-
-Modal.propTypes = {
-	header: PropTypes.string,
-	modalContent: PropTypes.element.isRequired,
 };

@@ -1,12 +1,12 @@
 import styles from './reset-password.module.css';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { FormEvent, ChangeEvent, useState } from 'react';
 import {
 	Button,
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { usersApi } from '../../../utils/users-api';
+import { usersApi } from '@utils/users-api';
 import {
 	resetPasswordTitle,
 	resetPasswordSubmitButton,
@@ -14,21 +14,23 @@ import {
 	resetPasswordRememberLink,
 } from '../../../config/consts';
 
-export const ResetPassword = () => {
+import { TPasswordApiRes } from '@/utils/types';
+
+export const ResetPassword = (): React.JSX.Element => {
 	const navigate = useNavigate();
 	const resetPasswordFlag = localStorage.getItem('resetPassword');
-	const [pass, setPass] = useState('');
-	const [code, setCode] = useState('');
+	const [pass, setPass] = useState<string>('');
+	const [code, setCode] = useState<string>('');
 
-	const handleCodeChange = (event) => {
+	const handleCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setCode(event.target.value);
 	};
 
-	const handlePassChange = (event) => {
+	const handlePassChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setPass(event.target.value);
 	};
 
-	function handleFormSubmit(event) {
+	function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		usersApi
 			.resetPassword({ password: pass, token: code })
@@ -36,7 +38,7 @@ export const ResetPassword = () => {
 			.catch((err) => alert(err));
 	}
 
-	function acceptPassword(userResponse) {
+	function acceptPassword(userResponse: TPasswordApiRes) {
 		if (userResponse.success) {
 			localStorage.removeItem('resetPassword');
 			navigate('/login', { replace: true });

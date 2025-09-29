@@ -2,10 +2,14 @@ import styles from './order-details.module.css';
 import { useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import img_order_details_done from '../../images/order_details_done.png';
+// @ts-expect-error "sprint5"
 import { getOrderState } from '../../services/orders/selectors';
-import { Preloader } from '@components/preloader/preloader';
+import { Preloader } from '@/components/preloader/preloader';
+// @ts-expect-error "sprint5"
 import { addOrder } from '../../services/orders/actions';
+// @ts-expect-error "sprint5"
 import { clearBurgerIngredients } from '../../services/burger-ingredients/reducers';
+// @ts-expect-error "sprint5"
 import { clearOrder } from '../../services/orders/reducers';
 import {
 	modalHeaderContext,
@@ -14,9 +18,12 @@ import {
 	addOrderErrorTitle,
 } from '../../config/consts';
 import { Error } from '../notification/error';
-export const OrderDetails = () => {
+import { TmodalSetHeader } from '@/utils/types';
+
+export const OrderDetails = (): React.JSX.Element => {
 	const dispatch = useDispatch();
-	const { setHeader } = useContext(modalHeaderContext);
+	const { setHeader } = useContext<TmodalSetHeader>(modalHeaderContext);
+	// @ts-expect-error "sprint5"
 	const { order, loading, error } = useSelector(getOrderState);
 
 	useEffect(() => {
@@ -46,17 +53,13 @@ export const OrderDetails = () => {
 
 	if (loading) {
 		return <Preloader />;
-	}
-
-	if (!loading && error) {
+	} else if (!loading && error) {
 		return (
 			<article className={`${styles.order_details}`}>
 				<Error>{error}</Error>
 			</article>
 		);
-	}
-
-	if (order) {
+	} else if (order) {
 		return (
 			<article className={`${styles.order_details}`}>
 				<p className={' text text_type_digits-large'}>{order.order.number}</p>
@@ -75,5 +78,5 @@ export const OrderDetails = () => {
 				</p>
 			</article>
 		);
-	}
+	} else return <></>;
 };

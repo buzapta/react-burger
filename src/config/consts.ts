@@ -1,7 +1,13 @@
 import { createContext } from 'react';
 import transparent_img from '../images/transparent.png';
+import {
+	TmodalSetHeader,
+	TBurgerGroup,
+	TBurgerGroupType,
+	burgerGroupCode,
+} from '../utils/types';
 
-export const modalHeaderContext = createContext({
+export const modalHeaderContext = createContext<TmodalSetHeader>({
 	setHeader: () => {},
 });
 
@@ -26,29 +32,26 @@ export const profileOrderHistorySubMenuName = 'История заказов';
 export const profileLogoutSubMenuName = 'Выход';
 
 export const subMenuHeaderTip = 'В этом разделе вы можете';
-export const subMenuTips = {
+
+export const subMenuTips: { [keypath: string]: string } = {
 	'/profile': 'изменить свои персональные данные',
 	'/profile/orderhistory': 'посмотреть свою историю заказов',
 };
 
-export const constructorIngredientLocation = {
-	BunTop: 'top',
-	BunBottom: 'bottom',
-	Ingredient: 'center',
-};
+export const burgerGroupType_default: TBurgerGroup =
+	burgerGroupCode.burgerGroupType_bun;
 
-export const burgerGroupType_default = 'bun';
-export const burgerGroupType = {
+export const burgerGroupType: TBurgerGroupType = {
 	bun: {
-		code: 'bun',
+		code: burgerGroupCode.burgerGroupType_bun,
 		name: 'Булки',
 	},
 	main: {
-		code: 'main',
+		code: burgerGroupCode.burgerGroupType_main,
 		name: 'Начинки',
 	},
 	sauce: {
-		code: 'sauce',
+		code: burgerGroupCode.burgerGroupType_sauce,
 		name: 'Соусы',
 	},
 };
@@ -97,3 +100,9 @@ export const resetPasswordTitle = 'Восстановление пароля';
 export const resetPasswordSubmitButton = 'Сохранить';
 export const resetPasswordRememberText = 'Вспомнили пароль?';
 export const resetPasswordRememberLink = 'Войти';
+
+export enum constructorLocation {
+	LocationTop = 'top',
+	LocationBottom = 'bottom',
+	LocationCenter = 'center',
+}

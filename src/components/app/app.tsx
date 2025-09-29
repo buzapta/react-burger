@@ -1,7 +1,7 @@
 import styles from './app.module.css';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppHeader } from '@components/app-header/app-header';
+import { AppHeader } from '@/components/app-header/app-header';
 import { Modal } from '../modal/modal';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { NotFound404Page } from '../../pages/notFound404';
@@ -10,6 +10,7 @@ import { LoginPage } from '../../pages/login';
 import { RegisterPage } from '../../pages/register';
 import { ForgotPasswordPage } from '../../pages/forgot-password';
 import { ResetPasswordPage } from '../../pages/reset-password';
+// @ts-expect-error "sprint5"
 import { checkUserAuth } from '../../services/users/actions';
 import { OnlyAuth, OnlyUnAuth } from './protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
@@ -30,15 +31,18 @@ import {
 	orderHistoryPagePath,
 	logoutPagePath,
 } from '../../config/consts';
-import { Preloader } from '@components/preloader/preloader';
+import { Preloader } from '@/components/preloader/preloader';
+// @ts-expect-error "sprint5"
 import { getIngredientsState } from '../../services/ingredients/selectors';
+// @ts-expect-error "sprint5"
 import { loadIngredients } from '../../services/ingredients/actions';
 import { Error } from '../notification/error';
 
-export const App = () => {
+export const App = (): React.JSX.Element => {
+	// @ts-expect-error "sprint5"
 	const { loading, error } = useSelector(getIngredientsState);
-	let location = useLocation();
-	let state = location.state;
+	const location = useLocation();
+	const state = location.state;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
