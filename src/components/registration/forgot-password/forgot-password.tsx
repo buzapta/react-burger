@@ -1,37 +1,38 @@
 import styles from './forgot-password.module.css';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
 	Button,
 	EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { usersApi } from '../../../utils/users-api';
+import { usersApi } from '@utils/users-api';
 import {
 	forgotPasswordTitle,
 	forgotPasswordSubmitButton,
 	forgotPasswordRememberText,
 	forgotPasswordRememberLink,
 } from '../../../config/consts';
+import { TPasswordApiRes } from '@utils/types';
 
-export const ForgotPassword = () => {
-	const [email, setEmail] = useState('');
+export const ForgotPassword = (): React.JSX.Element => {
+	const [email, setEmail] = useState<string>('');
 	const navigate = useNavigate();
 
-	function handleFormSubmit(event) {
+	function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		usersApi
 			.forgotPassword({ email: email })
 			.then((userResponse) => resetPassword(userResponse));
 	}
 
-	function resetPassword(userResponse) {
+	function resetPassword(userResponse: TPasswordApiRes) {
 		if (userResponse.success) {
-			localStorage.setItem('resetPassword', true);
+			localStorage.setItem('resetPassword', 'true');
 			navigate('/reset-password', { replace: true });
 		}
 	}
 
-	const handleEmailChange = (event) => {
+	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setEmail(event.target.value);
 	};
 

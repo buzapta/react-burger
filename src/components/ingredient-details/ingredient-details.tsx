@@ -2,10 +2,12 @@ import { useCallback, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styles from './ingredient-details.module.css';
+// @ts-expect-error "sprint5"
 import { getIngredientById } from '../../services/ingredients/selectors';
 import {
 	showIngredient,
 	clearIngredient,
+	// @ts-expect-error "sprint5"
 } from '../../services/ingredient/reducers';
 import {
 	modalHeaderContext,
@@ -17,11 +19,13 @@ import {
 	ingredientsDetailCarbohydratesTip,
 } from '../../config/consts';
 
-export const IngredientDetails = () => {
+import { TIngredient } from '@/utils/types';
+
+export const IngredientDetails = (): React.JSX.Element => {
 	const { _id } = useParams();
 	const { setHeader } = useContext(modalHeaderContext);
 
-	const ingredient = useSelector(getIngredientById(_id));
+	const ingredient: TIngredient = useSelector(getIngredientById(_id));
 	const dispatch = useDispatch();
 
 	const handleClose = useCallback(() => {

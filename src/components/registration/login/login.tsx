@@ -1,5 +1,5 @@
 import styles from './login.module.css';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -7,6 +7,7 @@ import {
 	EmailInput,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+// @ts-expect-error "sprint5"
 import { login } from '../../../services/users/actions';
 import {
 	loginTitle,
@@ -17,21 +18,21 @@ import {
 	loginForgotLink,
 } from '../../../config/consts';
 
-export const Login = () => {
+export const Login = (): React.JSX.Element => {
 	const dispatch = useDispatch();
 
 	const [email, setEmail] = useState('');
 	const [pass, setPass] = useState('');
 
-	const handleEmailChange = (event) => {
+	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setEmail(event.target.value);
 	};
 
-	const handlePassChange = (event) => {
+	const handlePassChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setPass(event.target.value);
 	};
 
-	function handleFormSubmit(event) {
+	function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		dispatch(login({ email: email, password: pass }));
 	}

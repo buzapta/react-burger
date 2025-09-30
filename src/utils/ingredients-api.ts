@@ -1,4 +1,5 @@
 import { getResponse } from './api';
+import { TIngredientsApiRes } from '@utils/types';
 
 export const ingredientsApiConfig = {
 	baseUrl: 'https://norma.nomoreparties.space/api',
@@ -7,10 +8,10 @@ export const ingredientsApiConfig = {
 	},
 };
 
-export const getIngredients = async () => {
+export const getIngredients = async (): Promise<TIngredientsApiRes> => {
 	const res = await fetch(`${ingredientsApiConfig.baseUrl}/ingredients`, {
 		method: 'GET',
 		headers: ingredientsApiConfig.headers,
 	});
-	return getResponse(res);
+	return getResponse<TIngredientsApiRes>(res);
 };

@@ -1,5 +1,11 @@
 import styles from './profile-user.module.css';
-import { useCallback, useEffect, useState } from 'react';
+import {
+	ChangeEvent,
+	FormEvent,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	Button,
@@ -7,17 +13,20 @@ import {
 	EmailInput,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+// @ts-expect-error "sprint5"
 import { getUser } from '../../../services/users/reducers';
+// @ts-expect-error "sprint5"
 import { updateUser } from '../../../services/users/actions';
+import { TUser } from '@utils/types';
 
-export const ProfileUser = () => {
+export const ProfileUser = (): React.JSX.Element => {
 	const dispatch = useDispatch();
 	const [edited, setEdited] = useState(false);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [pass, setPass] = useState('');
 
-	const user = useSelector(getUser);
+	const user: TUser = useSelector(getUser);
 
 	const setDefaultValue = useCallback(() => {
 		setName(user?.name);
@@ -29,17 +38,17 @@ export const ProfileUser = () => {
 		setDefaultValue();
 	}, [setDefaultValue]);
 
-	const handleNameChange = (event) => {
+	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 		setEdited(true);
 	};
 
-	const handleEmailChange = (event) => {
+	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setEmail(event.target.value);
 		setEdited(true);
 	};
 
-	const handlePassChange = (event) => {
+	const handlePassChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setPass(event.target.value);
 		setEdited(true);
 	};
@@ -48,7 +57,7 @@ export const ProfileUser = () => {
 		setDefaultValue();
 	};
 
-	function handleFormSubmit(event) {
+	function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		dispatch(updateUser({ email: email, password: pass, name: name }));
 		setEdited(false);

@@ -1,8 +1,3 @@
-import * as PropTypes from 'prop-types';
-import {
-	ingredientWithKeyPropType,
-	constructorIngredientLocationPropType,
-} from '@utils/prop-types.js';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrop, useDrag } from 'react-dnd';
@@ -14,6 +9,7 @@ import {
 import {
 	removeBurgerIngredient,
 	moveBurgerIngredient,
+	// @ts-expect-error "sprint5"
 } from '../../../services/burger-ingredients/reducers';
 import {
 	burgerGroupType,
@@ -21,19 +17,46 @@ import {
 	burgerConstructorIngredientBlankImg,
 	burgerConstructorBunBlankText,
 	burgerConstructorBunBlankImg,
-	constructorIngredientLocation,
+	constructorLocation,
 	dragItemTypes,
 } from '../../../config/consts';
+import { TIngredientWithKey } from '@/utils/types';
+import { Identifier } from 'dnd-core';
 
-export const BurgerConstructorIngredient = ({
-	ingredient,
-	ingredientLocation,
-	ingredientKey,
-	ingredientIndex,
-}) => {
+type TProps = {
+	ingredient?: TIngredientWithKey;
+	ingredientLocation:
+		| constructorLocation.LocationTop
+		| constructorLocation.LocationCenter
+		| constructorLocation.LocationBottom;
+	ingredientKey?: string;
+	ingredientIndex?: number;
+};
+
+type TDragObject = {
+	ingredientKey: string | undefined;
+	ingredientIndex: number | undefined;
+};
+
+type TDropCollectedProps = {
+	handlerId: Identifier | null;
+};
+
+export const BurgerConstructorIngredient = (
+	props: TProps
+): React.JSX.Element => {
+	const ingredient = props.ingredient;
+	const ingredientLocation = props.ingredientLocation;
+	const ingredientKey = props.ingredientKey;
+	const ingredientIndex = props.ingredientIndex;
+
 	const dispatch = useDispatch();
-	const ref = useRef(null);
-	const [{ handlerId }, drop] = useDrop({
+	const ref = useRef<HTMLElement | null>(null);
+	const [{ handlerId }, drop] = useDrop<
+		TDragObject,
+		unknown,
+		TDropCollectedProps
+	>({
 		accept: dragItemTypes.constructor_ingredient,
 		collect(monitor) {
 			return {
@@ -47,51 +70,62 @@ export const BurgerConstructorIngredient = ({
 			const dragIndex = item.ingredientIndex;
 			const hoverIndex = ingredientIndex;
 
-			if (dragIndex === hoverIndex) {
+			if (
+				hoverIndex === undefined ||
+				dragIndex === undefined ||
+				dragIndex === hoverIndex
+			) {
 				return;
 			}
+
 			const hoverBoundingRect = ref.current?.getBoundingClientRect();
 			const hoverMiddleY =
 				(hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 			const clientOffset = monitor.getClientOffset();
+
+			if (!clientOffset) {
+				return;
+			}
 			const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
 			if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
 				return;
 			}
 			if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
 				return;
 			}
+
 			moveCard(dragIndex, hoverIndex);
 			item.ingredientIndex = hoverIndex;
 		},
 	});
 
-	const moveCard = (dragIndex, hoverIndex) => {
+	const moveCard = (dragIndex: number, hoverIndex: number) => {
 		dispatch(
 			moveBurgerIngredient({ toIndex: dragIndex, fromIndex: hoverIndex })
 		);
 	};
 
-	const [, drag] = useDrag({
+	const [, drag] = useDrag<TDragObject, unknown, unknown>({
 		type: dragItemTypes.constructor_ingredient,
 		item: () => {
 			return { ingredientKey, ingredientIndex };
 		},
 	});
 
+	// @ts-expect-error "в компоненте ConstructorElement нет event в типе"
 	const handleRemoveIngredient = (event) => {
 		dispatch(
-			removeBurgerIngredient(
-				event.target.closest('article').getAttribute('index')
-			)
+			removeBurgerIngredient(event.target.closest('article').getAttribute('id'))
 		);
 	};
 
 	if (!ingredient) {
-		if (ingredientLocation === constructorIngredientLocation.BunTop) {
+		if (ingredientLocation === constructorLocation.LocationTop) {
 			return (
 				<article className={styles.content}>
 					<ConstructorElement
+						price={0}
 						type={ingredientLocation}
 						isLocked={true}
 						text={burgerConstructorBunBlankText}
@@ -101,10 +135,11 @@ export const BurgerConstructorIngredient = ({
 			);
 		}
 
-		if (ingredientLocation === constructorIngredientLocation.BunBottom) {
+		if (ingredientLocation === constructorLocation.LocationBottom) {
 			return (
 				<article className={styles.content}>
 					<ConstructorElement
+						price={0}
 						type={ingredientLocation}
 						isLocked={true}
 						text={burgerConstructorBunBlankText}
@@ -114,10 +149,11 @@ export const BurgerConstructorIngredient = ({
 			);
 		}
 
-		if (ingredientLocation === constructorIngredientLocation.Ingredient)
+		if (ingredientLocation === constructorLocation.LocationCenter)
 			return (
 				<article className={styles.content}>
 					<ConstructorElement
+						price={0}
 						text={burgerConstructorIngredientBlankText}
 						thumbnail={burgerConstructorIngredientBlankImg}
 					/>
@@ -125,19 +161,19 @@ export const BurgerConstructorIngredient = ({
 			);
 	}
 
-	if (ingredient.type === burgerGroupType.bun.code) {
-		return (
-			<article className={styles.content}>
-				<ConstructorElement
-					type={ingredientLocation}
-					isLocked={true}
-					text={`${ingredient.name}`}
-					price={ingredient.price}
-					thumbnail={ingredient.image}
-				/>
-			</article>
-		);
-	}
+	if (ingredient)
+		if (ingredient.type === burgerGroupType.bun.code) {
+			return (
+				<article className={styles.content}>
+					<ConstructorElement
+						isLocked={true}
+						text={`${ingredient?.name ?? ''}`}
+						price={ingredient?.price ?? 0}
+						thumbnail={ingredient?.image ?? ''}
+					/>
+				</article>
+			);
+		}
 	drag(drop(ref));
 
 	return (
@@ -145,21 +181,15 @@ export const BurgerConstructorIngredient = ({
 			className={styles.content}
 			ref={ref}
 			data-handler-id={handlerId}
-			index={ingredient.key}>
-			<DragIcon />
+			id={ingredient?.key ?? undefined}>
+			<DragIcon type='primary' />
 			<ConstructorElement
-				text={ingredient.name}
-				price={ingredient.price}
-				thumbnail={ingredient.image}
+				text={ingredient?.name ?? ''}
+				price={ingredient?.price ?? 0}
+				thumbnail={ingredient?.image ?? ''}
+				// @ts-expect-error "в компоненте ConstructorElement нет event в типе"
 				handleClose={handleRemoveIngredient}
 			/>
 		</article>
 	);
-};
-
-BurgerConstructorIngredient.propTypes = {
-	ingredient: ingredientWithKeyPropType,
-	ingredientLocation: constructorIngredientLocationPropType.type,
-	ingredientKey: PropTypes.string,
-	ingredientIndex: PropTypes.number,
 };
