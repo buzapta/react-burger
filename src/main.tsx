@@ -3,10 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { App } from '@/components/app/app';
 import './index.css';
 import { Provider } from 'react-redux';
-// @ts-expect-error "sprint5"
-import { createStore } from './services/store';
-
-const store = createStore();
+import { store } from './services/store';
 
 createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>

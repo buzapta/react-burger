@@ -3,8 +3,19 @@ import { getIsAuthChecked, getUser } from '../../services/users/reducers';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '@components/preloader/preloader';
 import { loginPagePath } from '../../config/consts';
+import React from 'react';
 
-const Protected = ({ onlyUnAuth = false, component, ignoreFrom = false }) => {
+type TProtectedParms = {
+	onlyUnAuth?: boolean;
+	component: React.JSX.Element;
+	ignoreFrom?: boolean;
+};
+
+const Protected = ({
+	onlyUnAuth = false,
+	component,
+	ignoreFrom = false,
+}: TProtectedParms) => {
 	const isAuthChecked = useSelector(getIsAuthChecked);
 	const user = useSelector(getUser);
 	const location = useLocation();
@@ -27,6 +38,6 @@ const Protected = ({ onlyUnAuth = false, component, ignoreFrom = false }) => {
 };
 
 export const OnlyAuth = Protected;
-export const OnlyUnAuth = ({ component }) => (
+export const OnlyUnAuth = ({ component }: { component: React.JSX.Element }) => (
 	<Protected onlyUnAuth={true} component={component} />
 );

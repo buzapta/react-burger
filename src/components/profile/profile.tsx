@@ -3,7 +3,7 @@ import { useResolvedPath, NavLink, Outlet, Path } from 'react-router';
 
 import {
 	profilePagePath,
-	orderHistoryPagePath,
+	ordersPagePath,
 	logoutPagePath,
 	profileSubName,
 	profileOrderHistorySubMenuName,
@@ -17,7 +17,7 @@ export const Profile = (): React.JSX.Element => {
 
 	return (
 		<>
-			<div className={`${styles.container} mt-20`}>
+			<div className={`${styles.container} mt-25`}>
 				<nav className={`${styles.menu}`}>
 					<NavLink
 						to={profilePagePath}
@@ -28,7 +28,7 @@ export const Profile = (): React.JSX.Element => {
 						<p className='text text_type_main-medium'>{profileSubName}</p>
 					</NavLink>
 					<NavLink
-						to={orderHistoryPagePath}
+						to={ordersPagePath}
 						className={({ isActive }) =>
 							isActive ? styles.link_active : styles.link
 						}
@@ -57,7 +57,7 @@ export const Profile = (): React.JSX.Element => {
 					</p>
 				</div>
 			</div>
-			<div className={'mt-20 ml-15'}>
+			<div>
 				<Outlet />
 			</div>
 		</>

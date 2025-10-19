@@ -1,0 +1,12 @@
+.order_item_ingredients {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 16px;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden auto;
+	list-style-type: none;
+}

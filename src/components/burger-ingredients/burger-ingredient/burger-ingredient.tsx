@@ -1,17 +1,19 @@
 import styles from './burger-ingredient.module.css';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../../services/store';
 import { Link, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
 import {
 	CurrencyIcon,
 	Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-// @ts-expect-error "sprint5"
 import { getBurgerIngredientCount } from '../../../services/burger-ingredients/selectors';
 import { dragItemTypes, ingredientsPagePath } from '../../../config/consts';
 import { TIngredient } from '@utils/types';
 
 type Tprops = { ingredient: TIngredient };
+type TDragObject = {
+	ingredient: TIngredient;
+};
 
 export const BurgerIngredient = (props: Tprops): React.JSX.Element => {
 	const location = useLocation();
@@ -19,7 +21,7 @@ export const BurgerIngredient = (props: Tprops): React.JSX.Element => {
 	const burgerIngredientCount = useSelector(
 		getBurgerIngredientCount(ingredient._id)
 	);
-	const [, dragRef] = useDrag({
+	const [, dragRef] = useDrag<TDragObject, unknown, unknown>({
 		type: dragItemTypes.ingredient,
 		item: { ingredient },
 	});
@@ -33,7 +35,6 @@ export const BurgerIngredient = (props: Tprops): React.JSX.Element => {
 				state={{ backgroundLocation: location }}>
 				<div className={styles.counter}>
 					<Counter
-						// @ts-expect-error "sprint5"
 						count={burgerIngredientCount}
 						size='default'
 						extraClass='m-1'

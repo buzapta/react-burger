@@ -1,8 +1,9 @@
 import { fetchWithRefresh } from './users-api';
-import { TOrdersApiReq, TOrdersApiRes } from '@utils/types';
+import { getResponse } from './api';
+import { TOrdersApiReq, TOrdersApiRes, TOrderInfoApiRes } from '@utils/types';
 
 export const ordersApiConfig = {
-	baseUrl: 'https://norma.nomoreparties.space/api',
+	baseUrl: 'https://norma.nomoreparties.space/api/orders',
 	headers: {
 		'Content-Type': 'application/json',
 	},
@@ -10,14 +11,23 @@ export const ordersApiConfig = {
 
 export const postOrder = async (
 	orderIngredients: TOrdersApiReq
-): Promise<TOrdersApiRes | Error> => {
-	return await fetchWithRefresh(`${ordersApiConfig.baseUrl}/orders`, {
+): Promise<TOrdersApiRes> => {
+	return await fetchWithRefresh(`${ordersApiConfig.baseUrl}`, {
 		method: 'POST',
-		// @ts-expect-error "sprint5"
+		// @ts-expect-error "unknown Authorization"
 		headers: {
 			...ordersApiConfig.headers,
 			Authorization: localStorage.getItem('accessToken'),
 		},
 		body: JSON.stringify({ ingredients: orderIngredients }),
 	});
+};
+
+export const getOrderInfo = async (
+	ordernumber: number
+): Promise<TOrderInfoApiRes> => {
+	return fetch(`${ordersApiConfig.baseUrl}/${ordernumber}`, {
+		method: 'GET',
+		headers: ordersApiConfig.headers,
+	}).then(getResponse<TOrderInfoApiRes>);
 };

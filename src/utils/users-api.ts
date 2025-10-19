@@ -7,7 +7,7 @@ import {
 	TUserApiRes,
 	TRegisterApiRes,
 	TLoginApiReq,
-	TLogoutApiReq,
+	TLogoutApiRes,
 	TUserUpdateApiReq,
 	TUserUpdateApiRes,
 	TTokenRefreshApiReq,
@@ -63,22 +63,22 @@ const login = async (data: TLoginApiReq) => {
 	return getResponseWithSetToken<TUserApiRes>(res);
 };
 
-const logout = async () => {
+const logout = async (): Promise<TLogoutApiRes> => {
 	const res = await fetch(`${usersApiConfig.baseUrl}/auth/logout`, {
 		method: 'POST',
 		headers: usersApiConfig.headers,
 		body: JSON.stringify({ token: localStorage.getItem('refreshToken') }),
 	});
 	removeToken();
-	return getResponse<TLogoutApiReq>(res);
+	return getResponse<TLogoutApiRes>(res);
 };
 
-const getUser = async (): Promise<TUserApiRes | Error> => {
+const getUser = async (): Promise<TUserApiRes> => {
 	return await fetchWithRefresh<TUserApiRes>(
 		`${usersApiConfig.baseUrl}/auth/user`,
 		{
 			method: 'GET',
-			// @ts-expect-error "sprint5"
+			// @ts-expect-error "unknown authorization attrib"
 			headers: {
 				...usersApiConfig.headers,
 				authorization: localStorage.getItem('accessToken'),
@@ -89,7 +89,7 @@ const getUser = async (): Promise<TUserApiRes | Error> => {
 
 const updateUser = async (
 	data: TUserUpdateApiReq
-): Promise<TUserUpdateApiRes | Error> => {
+): Promise<TUserUpdateApiRes> => {
 	return await fetchWithRefresh<TUserUpdateApiRes>(
 		`${usersApiConfig.baseUrl}/auth/user`,
 		{
@@ -124,7 +124,7 @@ const resetPassword = (
 	}).then(getResponse<TPasswordApiRes>);
 };
 
-const refreshToken = () => {
+export const refreshToken = () => {
 	return fetch(`${usersApiConfig.baseUrl}/auth/token`, {
 		method: 'POST',
 		headers: usersApiConfig.headers,
@@ -150,7 +150,7 @@ const refreshToken = () => {
 export const fetchWithRefresh = async <T>(
 	url: string | URL | Request,
 	options?: RequestInit | undefined
-): Promise<T | Error> => {
+): Promise<T> => {
 	try {
 		const res = await fetch(url, options);
 		return await getResponse<T>(res);
@@ -165,10 +165,10 @@ export const fetchWithRefresh = async <T>(
 				const res = await fetch(url, options);
 				return await getResponse<T>(res);
 			} catch (err_refresh) {
-				return Promise.reject<Error>(err_refresh);
+				return Promise.reject<T>(err_refresh);
 			}
 		} else {
-			return Promise.reject<Error>(err);
+			return Promise.reject<T>(err);
 		}
 	}
 };

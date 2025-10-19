@@ -1,24 +1,23 @@
 import styles from './app.module.css';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { AppHeader } from '@/components/app-header/app-header';
 import { Modal } from '../modal/modal';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { NotFound404Page } from '../../pages/notFound404';
-import { HomePage } from '../../pages/home';
-import { LoginPage } from '../../pages/login';
-import { RegisterPage } from '../../pages/register';
-import { ForgotPasswordPage } from '../../pages/forgot-password';
-import { ResetPasswordPage } from '../../pages/reset-password';
-// @ts-expect-error "sprint5"
+import { NotFound404Page } from '../../pages/notFound404-page';
+import { HomePage } from '../../pages/home-page';
+import { LoginPage } from '../../pages/login-page';
+import { RegisterPage } from '../../pages/register-page';
+import { ForgotPasswordPage } from '../../pages/forgot-password-page';
+import { ResetPasswordPage } from '../../pages/reset-password-page';
 import { checkUserAuth } from '../../services/users/actions';
 import { OnlyAuth, OnlyUnAuth } from './protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { OrderDetails } from '../order-details/order-details';
-import { OrderHistoryPage } from '../../pages/order-history-page';
+import { OrdersProfilePage } from '../../pages/orders-page';
 import { ProfileUserPage } from '../../pages/profile-user-page';
-import { ProfilePage } from '../../pages/profile';
-import { LogoutPage } from '../../pages/logout';
+import { ProfilePage } from '../../pages/profile-page';
+import { LogoutPage } from '../../pages/logout-page';
 
 import {
 	loginPagePath,
@@ -28,18 +27,20 @@ import {
 	ingredientDetailsPagePath,
 	addOrderPagePath,
 	profilePagePath,
-	orderHistoryPagePath,
+	ordersPagePath,
 	logoutPagePath,
+	feedPagePath,
+	orderFeedPagePath,
+	orderProfilePagePath,
 } from '../../config/consts';
 import { Preloader } from '@/components/preloader/preloader';
-// @ts-expect-error "sprint5"
 import { getIngredientsState } from '../../services/ingredients/selectors';
-// @ts-expect-error "sprint5"
 import { loadIngredients } from '../../services/ingredients/actions';
 import { Error } from '../notification/error';
+import { FeedPage } from '@/pages/feed-page';
+import { OrderInfo } from '../order-info/order-info';
 
 export const App = (): React.JSX.Element => {
-	// @ts-expect-error "sprint5"
 	const { loading, error } = useSelector(getIngredientsState);
 	const location = useLocation();
 	const state = location.state;
@@ -72,6 +73,9 @@ export const App = (): React.JSX.Element => {
 						path={ingredientDetailsPagePath}
 						element={<IngredientDetails />}
 					/>
+					<Route path={orderFeedPagePath} element={<OrderInfo />} />
+					<Route path={orderProfilePagePath} element={<OrderInfo />} />
+					<Route path={feedPagePath} element={<FeedPage />} />
 					<Route
 						path={loginPagePath}
 						element={<OnlyUnAuth component={<LoginPage />} />}
@@ -80,7 +84,7 @@ export const App = (): React.JSX.Element => {
 						path={profilePagePath}
 						element={<OnlyAuth component={<ProfilePage />} />}>
 						<Route index element={<ProfileUserPage />} />
-						<Route path={orderHistoryPagePath} element={<OrderHistoryPage />} />
+						<Route path={ordersPagePath} element={<OrdersProfilePage />} />
 						<Route path={logoutPagePath} element={<LogoutPage />} />
 					</Route>
 					<Route
@@ -102,6 +106,14 @@ export const App = (): React.JSX.Element => {
 						<Route
 							path={ingredientDetailsPagePath}
 							element={<Modal modalContent={<IngredientDetails />} />}
+						/>
+						<Route
+							path={orderFeedPagePath}
+							element={<Modal modalContent={<OrderInfo />} />}
+						/>
+						<Route
+							path={orderProfilePagePath}
+							element={<Modal modalContent={<OrderInfo />} />}
 						/>
 						<Route
 							path={addOrderPagePath}

@@ -16,7 +16,7 @@ type THeaderState = [
 
 export const Modal = (props: TProps): React.JSX.Element => {
 	const { modalContent } = props;
-	const [header, setHeader]: THeaderState = useState<TmodalHeader>('');
+	const [header, setHeader]: THeaderState = useState<TmodalHeader>(<></>);
 	const headerValue = { setHeader };
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const Modal = (props: TProps): React.JSX.Element => {
 			<modalHeaderContext.Provider value={headerValue}>
 				<section className={styles.wrap}>
 					<div className={`${styles.header} ml-10 mt-10 mr-10`}>
-						<p className={'text text_type_main-large'}>{header}</p>
+						{header}
 						<button
 							className={`${styles.buttonclose}`}
 							onClick={() => {

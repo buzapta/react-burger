@@ -6,31 +6,29 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../../services/store';
 import {
 	Button,
 	Input,
 	EmailInput,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-// @ts-expect-error "sprint5"
 import { getUser } from '../../../services/users/reducers';
-// @ts-expect-error "sprint5"
 import { updateUser } from '../../../services/users/actions';
 import { TUser } from '@utils/types';
 
 export const ProfileUser = (): React.JSX.Element => {
 	const dispatch = useDispatch();
-	const [edited, setEdited] = useState(false);
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-	const [pass, setPass] = useState('');
+	const [edited, setEdited] = useState<boolean>(false);
+	const [name, setName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [pass, setPass] = useState<string>('');
 
-	const user: TUser = useSelector(getUser);
+	const user: TUser | null = useSelector(getUser);
 
 	const setDefaultValue = useCallback(() => {
-		setName(user?.name);
-		setEmail(user?.email);
+		setName(user?.name ?? '');
+		setEmail(user?.email ?? '');
 		setEdited(false);
 	}, [setName, setEmail, setEdited, user]);
 
@@ -69,7 +67,7 @@ export const ProfileUser = (): React.JSX.Element => {
 				onSubmit={handleFormSubmit}
 				className={`${styles.container}`}
 				id='profile_form'>
-				<div className={`${styles.main}`}>
+				<div className={`mt-25 ml-15 ${styles.main}`}>
 					<div className={`${styles.content} `}>
 						<Input
 							placeholder={'Имя'}

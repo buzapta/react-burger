@@ -1,6 +1,5 @@
 .wrap {
 	position: relative;
-	width: 720px;
 	overflow: hidden;
 	background-color: var(--background);
 	border-radius: 40px;
@@ -19,6 +18,5 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 80px;
 	padding: 0;
 }

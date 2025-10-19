@@ -1,7 +1,6 @@
 import styles from './app-header.module.css';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-// @ts-expect-error "sprint5"
+import { useSelector } from '../../services/store';
 import { getUser } from '../../services/users/reducers';
 import {
 	BurgerIcon,
@@ -18,7 +17,7 @@ import {
 import { TUser } from '@/utils/types';
 
 export const AppHeader = (): React.JSX.Element => {
-	const user: TUser = useSelector(getUser);
+	const user: TUser | null = useSelector(getUser);
 	return (
 		<header className={styles.header}>
 			<nav className={`${styles.menu} p-4`}>

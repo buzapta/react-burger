@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../../services/store';
 import { useDrop, useDrag } from 'react-dnd';
 import styles from './burger-constructor-ingredient.module.css';
 import {
@@ -9,7 +9,6 @@ import {
 import {
 	removeBurgerIngredient,
 	moveBurgerIngredient,
-	// @ts-expect-error "sprint5"
 } from '../../../services/burger-ingredients/reducers';
 import {
 	burgerGroupType,
@@ -24,7 +23,7 @@ import { TIngredientWithKey } from '@/utils/types';
 import { Identifier } from 'dnd-core';
 
 type TProps = {
-	ingredient?: TIngredientWithKey;
+	ingredient?: TIngredientWithKey | null;
 	ingredientLocation:
 		| constructorLocation.LocationTop
 		| constructorLocation.LocationCenter
