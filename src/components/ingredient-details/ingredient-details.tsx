@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
 import styles from './ingredient-details.module.css';
-// @ts-expect-error "sprint5"
 import { getIngredientById } from '../../services/ingredients/selectors';
 import {
 	showIngredient,
 	clearIngredient,
-	// @ts-expect-error "sprint5"
 } from '../../services/ingredient/reducers';
 import {
 	modalHeaderContext,
@@ -24,8 +22,10 @@ import { TIngredient } from '@/utils/types';
 export const IngredientDetails = (): React.JSX.Element => {
 	const { _id } = useParams();
 	const { setHeader } = useContext(modalHeaderContext);
+	const ingredient: TIngredient | undefined = useSelector(
+		getIngredientById(_id)
+	);
 
-	const ingredient: TIngredient = useSelector(getIngredientById(_id));
 	const dispatch = useDispatch();
 
 	const handleClose = useCallback(() => {
@@ -33,7 +33,9 @@ export const IngredientDetails = (): React.JSX.Element => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		setHeader(ingredientsDetailTitle);
+		setHeader(
+			<p className={'text text_type_main-large'}>{ingredientsDetailTitle}</p>
+		);
 		if (ingredient) {
 			dispatch(showIngredient(ingredient));
 		}
@@ -45,7 +47,7 @@ export const IngredientDetails = (): React.JSX.Element => {
 	}
 
 	return (
-		<div>
+		<div className={styles.wrapper}>
 			<article className={styles.ingredient_details}>
 				<img
 					className={styles.image}

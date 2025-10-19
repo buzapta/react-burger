@@ -16,11 +16,17 @@ export const registerPagePath = '/register';
 export const forgotPasswordPagePath = '/forgot-password';
 export const resetPasswordPagePath = '/reset-password';
 export const ingredientsPagePath = '/ingredients';
-export const ingredientDetailsPagePath = `${ingredientsPagePath}/:_id`;
+export const ingredientIdParam = '/:_id';
+export const ingredientDetailsPagePath = `${ingredientsPagePath}${ingredientIdParam}`;
 export const addOrderPagePath = '/addorder';
+export const feedPagePath = '/feed';
+export const orderNumberParam = '/:number';
+export const orderFeedPagePath = `${feedPagePath}${orderNumberParam}`;
 
 export const profilePagePath = '/profile';
-export const orderHistoryPagePath = 'orderhistory';
+export const ordersPagePath = 'orders';
+export const orderProfilePagePath = `${profilePagePath}/${ordersPagePath}${orderNumberParam}`;
+
 export const logoutPagePath = 'logout';
 
 export const constructorMainMenuName = 'Конструктор';
@@ -35,7 +41,7 @@ export const subMenuHeaderTip = 'В этом разделе вы можете';
 
 export const subMenuTips: { [keypath: string]: string } = {
 	'/profile': 'изменить свои персональные данные',
-	'/profile/orderhistory': 'посмотреть свою историю заказов',
+	'/profile/orders': 'посмотреть свою историю заказов',
 };
 
 export const burgerGroupType_default: TBurgerGroup =
@@ -101,8 +107,38 @@ export const resetPasswordSubmitButton = 'Сохранить';
 export const resetPasswordRememberText = 'Вспомнили пароль?';
 export const resetPasswordRememberLink = 'Войти';
 
+export const feedTitle = 'Лента заказов';
+export const feedTotalsDoneHeader = 'Готовы:';
+export const feedTotalsPendingHeader = 'В работе:';
+export const feedTotalsDoneAllTime = 'Выполнено за все время:';
+export const feedTotalsDoneToday = 'Выполнено за сегодня:';
+
+export const orderInfoLoadingTitle = 'Запрос заказа...';
+export const orderInfoErrorTitle = 'Ошибка запроса заказа';
+export const order_info_ingredients_title = 'Состав:';
+
 export enum constructorLocation {
 	LocationTop = 'top',
 	LocationBottom = 'bottom',
 	LocationCenter = 'center',
 }
+
+export const ORDERS_FEED_SERVER_URL =
+	'wss://norma.nomoreparties.space/orders/all';
+export const ORDERS_PROFILE_SERVER_URL =
+	'wss://norma.nomoreparties.space/orders';
+
+export const order_item_image_gap = 48;
+export const order_item_max_count = 6;
+
+export enum order_item_status {
+	done = 'done',
+	pending = 'pending',
+	created = 'created',
+}
+
+export const order_item_status_name: { [key: string]: string } = {
+	done: 'Выполнен',
+	pending: 'Готовиться',
+	created: 'Создан',
+};

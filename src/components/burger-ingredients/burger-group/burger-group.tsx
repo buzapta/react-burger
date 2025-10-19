@@ -1,8 +1,7 @@
 import styles from './burger-group.module.css';
 import { forwardRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../../services/store';
 import { BurgerIngredient } from '../burger-ingredient/burger-ingredient';
-// @ts-expect-error "sprint5"
 import { getIngredientsByType } from '../../../services/ingredients/selectors';
 import { TBurgerGroupTypeItem, TIngredient } from '@utils/types';
 

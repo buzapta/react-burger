@@ -1,8 +1,7 @@
 import styles from './register.module.css';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../../services/store';
 import { Link } from 'react-router-dom';
-// @ts-expect-error "sprint5"
 import { register } from '../../../services/users/actions';
 
 import {

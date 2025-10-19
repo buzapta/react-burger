@@ -1,17 +1,16 @@
 import styles from './burger-constructor.module.css';
 import { SyntheticEvent } from 'react';
 import { useDrop } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
 	getBurgerIngredientsPrice,
 	getBurgerIngredientsState,
-	// @ts-expect-error "sprint5"
 } from '../../services/burger-ingredients/selectors';
 import {
 	addBurgerIngredient,
 	addBurgerBun,
-	// @ts-expect-error "sprint5"
+	TBurgerIngredientsStore,
 } from '../../services/burger-ingredients/reducers';
 import {
 	Button,
@@ -24,7 +23,7 @@ import {
 	dragItemTypes,
 	addOrderButtonText,
 } from '../../config/consts';
-import { TIngredient, TIngredientWithKey } from '@utils/types';
+import { TIngredient } from '@utils/types';
 import { BurgerConstructorIngredient } from './burger-constructor-ingredient/burger-constructor-ingredient';
 
 type TDropObject = {
@@ -68,11 +67,9 @@ export const BurgerConstructor = (): React.JSX.Element => {
 		}
 	};
 
-	const {
-		bun,
-		ingredients,
-	}: { bun: TIngredientWithKey; ingredients: TIngredientWithKey[] } =
-		useSelector(getBurgerIngredientsState);
+	const { bun, ingredients }: TBurgerIngredientsStore = useSelector(
+		getBurgerIngredientsState
+	);
 
 	const handleOrderButtonClick = (event: SyntheticEvent) => {
 		event.preventDefault();

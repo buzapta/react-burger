@@ -1,16 +1,21 @@
-export type TmodalHeader = string;
+export type TmodalHeader = React.JSX.Element;
 export type TmodalSetHeader = {
 	setHeader: React.Dispatch<React.SetStateAction<TmodalHeader>>;
+};
+
+export type TSuccessApiRes = {
+	success: boolean;
 };
 
 export type TForgotPasswordApiReq = {
 	email: string;
 };
 
-export type TPasswordApiRes = {
-	success: boolean;
+export type TBaseApiRes = TSuccessApiRes & {
 	message: string;
 };
+
+export type TPasswordApiRes = TBaseApiRes;
 
 export type TResetPasswordApiReq = {
 	password: string;
@@ -29,45 +34,70 @@ export type TLogoutApiReq = {
 	token: string;
 };
 
-export type TUser = Omit<TUserRegisterApiReq, 'password'>;
-
-export type TUserUpdateApiReq = TUserRegisterApiReq;
-
-export type TUserUpdateApiRes = {
-	success: boolean;
-	user: TUser;
-};
+export type TLogoutApiRes = TBaseApiRes;
 
 export type TTokens = {
 	accessToken: string;
 	refreshToken: string;
 };
 
-export type TUserApiRes = TTokens & {
-	success: boolean;
+export type TUser = Omit<TUserRegisterApiReq, 'password'>;
+
+export type TUserUpdateApiReq = TUserRegisterApiReq;
+
+export type TUserUpdateApiRes = TSuccessApiRes & {
 	user: TUser;
 };
 
-export type TTokenRefreshApiReq = TTokens & {
-	success: boolean;
-};
+export type TUserApiRes = TTokens &
+	TSuccessApiRes & {
+		user: TUser;
+	};
+
+export type TTokenRefreshApiReq = TTokens & { success: boolean };
 
 export type TRegisterApiRes = TUserApiRes & TUserUpdateApiRes;
 
-export type TOrdersApiReq = {
-	ingredients: string[];
-};
-
-export type TOrdersApiRes = {
+export type TOrder = {
 	name: string;
 	order: {
 		number: number;
 	};
-	success: boolean;
 };
 
-export type TIngredientsApiRes = {
-	success: boolean;
+export type TOrdersApiReq = string[];
+
+export type TOrdersApiRes = TOrder & { success: boolean };
+
+export type TIngredient = {
+	_id: string;
+	name: string;
+	type: TBurgerGroup;
+	proteins: number;
+	fat: number;
+	carbohydrates: number;
+	calories: number;
+	price: number;
+	image: string;
+	image_large: string;
+	image_mobile: string;
+	__v: number;
+};
+
+export type TGroupedIngredient = {
+	ingredient: TIngredient;
+	count: number;
+};
+
+export type TIngredientWithKey = TIngredient & {
+	key?: string;
+};
+
+export type TMappedIngredients = {
+	[key: string]: TIngredient;
+};
+
+export type TIngredientsApiRes = TSuccessApiRes & {
 	data: TIngredient[];
 };
 
@@ -93,21 +123,32 @@ export type TBurgerGroupType = {
 	sauce: TBurgerGroupTypeItem;
 };
 
-export type TIngredient = {
+export type TOrderItem = {
+	ingredients: TIngredient['_id'][];
 	_id: string;
+	status: string;
 	name: string;
-	type: TBurgerGroup;
-	proteins: number;
-	fat: number;
-	carbohydrates: number;
-	calories: number;
-	price: number;
-	image: string;
-	image_large: string;
-	image_mobile: string;
-	__v: number;
+	number: number;
+	createdAt: string;
+	updatedAt: string;
 };
 
-export type TIngredientWithKey = TIngredient & {
-	key?: string;
+export type TOrdersInfo = {
+	orders: TOrderItem[];
+	total: number;
+	totalToday: number;
 };
+
+export type TOrderInfoApiRes = TSuccessApiRes & TOrdersInfo;
+
+export type TOrdersFeedInfo = TOrdersInfo;
+export type TOrdersProfileInfo = TOrdersFeedInfo;
+
+export type TOrdersFeedInfoApiRes = TSuccessApiRes & TOrdersFeedInfo;
+export type TOrdersProfileInfoApiRes = TSuccessApiRes & TOrdersProfileInfo;
+
+export enum WebsocketStatus {
+	CONNECTING = 'CONNECTING...',
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE',
+}

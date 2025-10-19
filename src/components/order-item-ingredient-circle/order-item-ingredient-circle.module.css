@@ -1,0 +1,34 @@
+.order_item_inner {
+	top: 2px;
+	left: 2px;
+	display: flex;
+	width: 60px;
+	height: 60px;
+	margin: 2px;
+	overflow: hidden;
+	background-color: var(--background-alt);
+	border-radius: 32px;
+}
+
+.order_item_image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 60px;
+	height: 60px;
+	overflow: hidden;
+	background: var(--background-alt);
+	border-radius: 32px;
+	opacity: 0.6;
+}
+
+.img {
+	height: 56px;
+	margin: auto;
+}
+
+.order_item_count {
+	position: absolute;
+	top: 20px;
+	left: 16px;
+}

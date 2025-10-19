@@ -1,0 +1,19 @@
+.order_item_ingredient {
+	display: flex;
+	flex-direction: row;
+	place-content: flex-start space-between;
+	align-items: center;
+	width: 100%;
+	column-gap: 16px;
+}
+
+.order_item_name {
+	width: 100%;
+}
+
+.order_item_countprice {
+	display: flex;
+	flex-direction: row;
+	place-content: flex-start space-between;
+	column-gap: 4px;
+}

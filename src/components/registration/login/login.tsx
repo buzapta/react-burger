@@ -1,13 +1,12 @@
 import styles from './login.module.css';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../../services/store';
 import { Link } from 'react-router-dom';
 import {
 	Button,
 	EmailInput,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-// @ts-expect-error "sprint5"
 import { login } from '../../../services/users/actions';
 import {
 	loginTitle,

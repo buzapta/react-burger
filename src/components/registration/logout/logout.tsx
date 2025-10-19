@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-// @ts-expect-error "sprint5"
+import { useDispatch } from '../../../services/store';
 import { logout } from '../../../services/users/actions';
 
-export const Logout = () => {
+export const Logout = (): React.JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -14,4 +13,6 @@ export const Logout = () => {
 			dispatch(logout());
 		};
 	}, [dispatch, navigate]);
+
+	return <></>;
 };
