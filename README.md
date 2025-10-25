@@ -1,5 +1,7 @@
 # Приложение _Бургерная Stellar Burgers_
 
+https://buzapta.github.io/react-burger/index.html
+
 ## Описание проекта
 
 Проект Бургерная Stellar Burgers предназначен для формирования и отслеживания заказов бургеров.
