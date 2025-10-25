@@ -56,4 +56,9 @@ module.exports = {
 		'postcss-modules/no-undef-class': 'error',
 		'postcss-modules/no-unused-class': 'warn',
 	},
+	globals: {
+    	"it": "readonly",
+		"describe": "readonly",
+		"cy": "readonly"
+	}
 };

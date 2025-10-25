@@ -1,4 +1,4 @@
-import { postOrder, getOrderInfo } from '../../utils/orders-api';
+import { postOrder } from '../../utils/orders-api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addOrderValidateError } from './reducers';
 import { TOrdersApiReq, TIngredient } from '@/utils/types';
@@ -29,10 +29,3 @@ export const addOrder =
 			);
 		}
 	};
-
-export const getOrderInfoThunk = createAsyncThunk(
-	'orders/getOrderByNumber',
-	async (order_number: number) => {
-		return getOrderInfo(order_number);
-	}
-);

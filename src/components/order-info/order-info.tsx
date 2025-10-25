@@ -16,7 +16,7 @@ import {
 	FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FindOrderInfoByNumber } from '@/services/orders-info/selectors';
-import { getOrderInfoThunk } from '@/services/orders/actions';
+import { getOrderInfoThunk } from '@/services/orders-info/actions';
 import { Error } from '../notification/error';
 import {
 	getIngredientsByIdArray,

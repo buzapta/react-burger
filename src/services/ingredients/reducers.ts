@@ -9,7 +9,7 @@ export type TIngredientsStore = {
 	error: string | null;
 };
 
-const initialState: TIngredientsStore = {
+export const initialState: TIngredientsStore = {
 	ingredients: [],
 	mapped_ingredients: null,
 	loading: false,
@@ -26,8 +26,8 @@ export const ingredientsSlice = createSlice({
 				state.loading = true;
 				state.error = null;
 			})
-			.addCase(loadIngredients.rejected, (state, action) => {
-				state.error = action.error?.message ?? 'Unknown error';
+			.addCase(loadIngredients.rejected, (state) => {
+				state.error = 'Unknown error';
 				state.loading = false;
 			})
 			.addCase(loadIngredients.fulfilled, (state, action) => {

@@ -8,7 +8,7 @@ type TOrderStore = {
 	error: string | null;
 };
 
-const initialState: TOrderStore = {
+export const initialState: TOrderStore = {
 	order: null,
 	loading: false,
 	error: null,
@@ -32,8 +32,8 @@ export const ordersSlice = createSlice({
 				state.loading = true;
 				state.error = null;
 			})
-			.addCase(addOrderThunk.rejected, (state, action) => {
-				state.error = action.error?.message ?? 'Unknown error';
+			.addCase(addOrderThunk.rejected, (state) => {
+				state.error = 'Unknown error';
 				state.loading = false;
 			})
 			.addCase(addOrderThunk.fulfilled, (state, action) => {

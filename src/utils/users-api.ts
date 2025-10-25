@@ -12,9 +12,10 @@ import {
 	TUserUpdateApiRes,
 	TTokenRefreshApiReq,
 } from '@utils/types';
+import { BASE_API_URL } from '@/config/consts';
 
 const usersApiConfig = {
-	baseUrl: 'https://norma.nomoreparties.space/api',
+	baseUrl: BASE_API_URL,
 	headers: {
 		Accept: 'application/json',
 		'Content-Type': 'application/json; charset=UTF-8',

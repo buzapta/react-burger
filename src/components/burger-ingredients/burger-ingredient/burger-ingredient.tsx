@@ -33,19 +33,25 @@ export const BurgerIngredient = (props: Tprops): React.JSX.Element => {
 				className={styles.burger_link}
 				to={`${ingredientsPagePath}/${ingredient._id}`}
 				state={{ backgroundLocation: location }}>
-				<div className={styles.counter}>
-					<Counter
-						count={burgerIngredientCount}
-						size='default'
-						extraClass='m-1'
-					/>
+				<div data-testid={ingredient._id}>
+					<div className={styles.counter}>
+						<Counter
+							count={burgerIngredientCount}
+							size='default'
+							extraClass='m-1'
+						/>
+					</div>
+					<img src={ingredient.image} alt={ingredient.name} />
+					<div className={`${styles.price} mt-1`}>
+						<p className={'text text_type_digits-default'}>
+							{ingredient.price}
+						</p>
+						<CurrencyIcon type='primary' />
+					</div>
+					<p className={'text text_type_main-default mt-1'}>
+						{ingredient.name}
+					</p>
 				</div>
-				<img src={ingredient.image} alt={ingredient.name} />
-				<div className={`${styles.price} mt-1`}>
-					<p className={'text text_type_digits-default'}>{ingredient.price}</p>
-					<CurrencyIcon type='primary' />
-				</div>
-				<p className={'text text_type_main-default mt-1'}>{ingredient.name}</p>
 			</Link>
 		</article>
 	);

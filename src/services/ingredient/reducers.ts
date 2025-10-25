@@ -5,7 +5,7 @@ type TIngredientStore = {
 	ingredient: TIngredient | null;
 };
 
-const initialState: TIngredientStore = {
+export const initialState: TIngredientStore = {
 	ingredient: null,
 };
 

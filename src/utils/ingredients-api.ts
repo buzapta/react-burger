@@ -1,8 +1,9 @@
 import { getResponse } from './api';
 import { TIngredientsApiRes } from '@utils/types';
+import { BASE_API_URL } from '@/config/consts';
 
 export const ingredientsApiConfig = {
-	baseUrl: 'https://norma.nomoreparties.space/api',
+	baseUrl: BASE_API_URL,
 	headers: {
 		'Content-Type': 'application/json',
 	},

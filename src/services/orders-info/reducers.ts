@@ -7,7 +7,7 @@ type TOrderInfoStore = {
 	loading_info: boolean;
 };
 
-const initialState: TOrderInfoStore = {
+export const initialState: TOrderInfoStore = {
 	order_info: null,
 	loading_info: false,
 };

@@ -79,13 +79,19 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
 	return (
 		<section className={`${styles.burger_constructor} pt-25 ml-10`}>
-			<div className={`${styles.bun} ml-4 pl-4`} ref={dropTargetBunTop}>
+			<div
+				className={`${styles.bun} ml-4 pl-4`}
+				ref={dropTargetBunTop}
+				data-testid='bun_top_container'>
 				<BurgerConstructorIngredient
 					ingredient={bun}
 					ingredientLocation={constructorLocation.LocationTop}
 				/>
 			</div>
-			<ul className={`${styles.list} ml-4`} ref={dropTargetIngredient}>
+			<ul
+				className={`${styles.list} ml-4`}
+				ref={dropTargetIngredient}
+				data-testid='ing_container'>
 				{ingredients.length == 0 && (
 					<li className={`${styles.list_item} ml-6`}>
 						<BurgerConstructorIngredient
@@ -104,7 +110,10 @@ export const BurgerConstructor = (): React.JSX.Element => {
 					</li>
 				))}
 			</ul>
-			<div className={`${styles.bun} ml-4 pl-4`} ref={dropTargetBunBottom}>
+			<div
+				className={`${styles.bun} ml-4 pl-4`}
+				ref={dropTargetBunBottom}
+				data-testid='bun_bottom_container'>
 				<BurgerConstructorIngredient
 					ingredient={bun}
 					ingredientLocation={constructorLocation.LocationBottom}

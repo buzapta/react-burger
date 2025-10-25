@@ -16,7 +16,7 @@ export type OrdersProfileStore = {
 	error: string | null;
 };
 
-const initialState: OrdersProfileStore = {
+export const initialState: OrdersProfileStore = {
 	ordersProfileInfo: {
 		orders: [],
 		total: 0,
