@@ -1,9 +1,10 @@
 import { fetchWithRefresh } from './users-api';
 import { getResponse } from './api';
 import { TOrdersApiReq, TOrdersApiRes, TOrderInfoApiRes } from '@utils/types';
+import { BASE_API_URL } from '@/config/consts';
 
 export const ordersApiConfig = {
-	baseUrl: 'https://norma.nomoreparties.space/api/orders',
+	baseUrl: `${BASE_API_URL}/orders`,
 	headers: {
 		'Content-Type': 'application/json',
 	},

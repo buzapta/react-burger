@@ -55,6 +55,7 @@ export const Modal = (props: TProps): React.JSX.Element => {
 					<div className={`${styles.header} ml-10 mt-10 mr-10`}>
 						{header}
 						<button
+							data-testid='modal_close_button'
 							className={`${styles.buttonclose}`}
 							onClick={() => {
 								handleClose();

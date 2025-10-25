@@ -15,7 +15,7 @@ export type OrdersFeedStore = {
 	error: string | null;
 };
 
-const initialState: OrdersFeedStore = {
+export const initialState: OrdersFeedStore = {
 	ordersFeedInfo: {
 		orders: [],
 		total: 0,
@@ -46,8 +46,8 @@ export const ordersFeedSlice = createSlice({
 			})
 			.addCase(onMessageOrdersFeed, (state, action) => {
 				state.loading = false;
-				(state.ordersFeedInfo.orders = action.payload.orders),
-					(state.ordersFeedInfo.total = action.payload.total);
+				state.ordersFeedInfo.orders = action.payload.orders;
+				state.ordersFeedInfo.total = action.payload.total;
 				state.ordersFeedInfo.totalToday = action.payload.totalToday;
 			});
 	},

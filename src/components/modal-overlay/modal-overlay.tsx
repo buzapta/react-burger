@@ -6,7 +6,7 @@ type Tprops = { children: ReactNode };
 export const ModalOverlay = forwardRef<HTMLDivElement, Tprops>(
 	(props, ref): React.JSX.Element => {
 		return (
-			<div ref={ref} className={styles.wrap}>
+			<div ref={ref} className={styles.wrap} data-testid='modal_overlay'>
 				{props.children}
 			</div>
 		);

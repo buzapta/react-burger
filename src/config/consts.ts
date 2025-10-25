@@ -7,6 +7,12 @@ import {
 	burgerGroupCode,
 } from '../utils/types';
 
+export const BASE_API_URL = 'https://norma.education-services.ru/api';
+export const ORDERS_FEED_SERVER_URL =
+	'wss://norma.education-services.ru/orders/all';
+export const ORDERS_PROFILE_SERVER_URL =
+	'wss://norma.education-services.ru/orders';
+
 export const modalHeaderContext = createContext<TmodalSetHeader>({
 	setHeader: () => {},
 });
@@ -122,11 +128,6 @@ export enum constructorLocation {
 	LocationBottom = 'bottom',
 	LocationCenter = 'center',
 }
-
-export const ORDERS_FEED_SERVER_URL =
-	'wss://norma.nomoreparties.space/orders/all';
-export const ORDERS_PROFILE_SERVER_URL =
-	'wss://norma.nomoreparties.space/orders';
 
 export const order_item_image_gap = 48;
 export const order_item_max_count = 6;

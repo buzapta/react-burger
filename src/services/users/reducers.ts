@@ -8,7 +8,7 @@ type TUserStore = {
 	isAuthChecked: boolean;
 };
 
-const initialState: TUserStore = {
+export const initialState: TUserStore = {
 	user: null,
 	isAuthChecked: false,
 };
