@@ -1,5 +1,3 @@
-import { describe, cy, it } from 'cypress';
-
 describe('Test ingredient drag-n-drop', () => {
 	const api_url = 'https://norma.education-services.ru/api/ingredients';
 	const test_bun_id = 'test_bun_id_1';

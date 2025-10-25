@@ -1,5 +1,3 @@
-import { describe, cy, it } from 'cypress';
-
 describe('Test ingredient modal card', () => {
 	const api_url = 'https://norma.education-services.ru/api/ingredients';
 	const test_ingredient_id = 'test_ing_id_1';
